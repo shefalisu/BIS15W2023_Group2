@@ -1,0 +1,34 @@
+---
+title: "Sharktank - Rafael"
+output: html_document
+date: "2023-03-07"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(naniar)
+library(RColorBrewer)
+```
+
+Load data in
+```{r}
+sharktank <-readr::read_csv("data/Shark Tank US dataset.csv")
+```
+
+Take a look
+```{r}
+glimpse(sharktank)
+```
+
+clean the names
+```{r}
+sharktank <- clean_names(sharktank)
+names(sharktank)
+```
+
