@@ -29,6 +29,57 @@ sharktank <- read_csv("data/Shark Tank US dataset.csv") %>%
 
 names(sharktank)
 ```
+```{r}
+sharktank %>% 
+  select(barbara_corcoran_investment_equity
+         )
+  
+```
+
+
+```{r}
+
+##updated in office hours
+sharktank %>% 
+  relocate(contains("_investment_equity")) %>% 
+  relocate(contains("_investment_amount")) %>% 
+  pivot_longer(barbara_corcoran_investment_amount : guest_investment_equity,
+    names_to = c("shark", "investment_type"),
+    names_sep = "_investment_",
+    values_to = "dollars") %>% 
+  relocate(shark, investment_type, dollars)
+
+```
+```{r}
+
+#%>% 
+#  relocate(contains("_investment_equity")) %>%
+
+
+
+sharktank %>% 
+  relocate(contains("_investment_equity")) %>% 
+  pivot_longer(barbara_corcoran_investment_equity : guest_investment_equity,
+    names_to = c("shark", investment_
+    names_sep = "_investment_equity",
+    values_to = "investment_equity"
+  ) #%>% 
+#  relocate(contains("_investment_equity")) %>%
+
+```
+
+
+```{r}
+sharktank %>% 
+  select(contains("_investment_equity"))
+```
+
+
+```{r}
+sharktank %>% 
+  separate(sep = "")
+```
+
 
 
 ```{r}
