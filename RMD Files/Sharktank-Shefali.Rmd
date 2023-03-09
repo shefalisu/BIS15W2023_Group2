@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #packages
 ```{r}
-install.packages("ggplot2")
+#install.packages("ggplot2")
 ```
 
 #Load Libraries 
@@ -40,14 +40,70 @@ sharktank %>%
 ```{r}
 
 ##updated in office hours
-sharktank %>% 
+sharktank_long <- sharktank %>% 
+  rename(original_offer_investment_equity = original_offered_equity) %>% 
   relocate(contains("_investment_equity")) %>% 
   relocate(contains("_investment_amount")) %>% 
+  pivot_longer(barbara_corcoran_investment_amount : guest_investment_equity,
+      names_to = c("shark", "investment_type"),
+    names_sep = "_investment_",
+    values_to = "dollars") %>% 
+  relocate(shark, investment_type, dollars)
+
+sharktank_long
+
+```
+
+
+
+```{r}
+##updated in office hours
+sharktank_long_invested <- sharktank %>% 
+  rename(original_offer_investment_equity = original_offered_equity) %>% 
+  relocate(contains("_investment_equity")) %>% 
+  relocate(contains("_investment_amount")) %>%
+  filter(!is.na(barbara_corcoran_investment_equity) |
+         !is.na(mark_cuban_investment_equity)       |
+         !is.na(lori_greiner_investment_equity)     |
+         !is.na(robert_herjavec_investment_equity)  |
+         !is.na(daymond_john_investment_equity)     |
+         !is.na(kevin_o_leary_investment_equity)    |
+         !is.na(guest_investment_equity) 
+         ) %>% 
   pivot_longer(barbara_corcoran_investment_amount : guest_investment_equity,
     names_to = c("shark", "investment_type"),
     names_sep = "_investment_",
     values_to = "dollars") %>% 
   relocate(shark, investment_type, dollars)
+
+sharktank_long_invested
+```
+
+
+```{r}
+sharktank_long_invested %>% 
+  filter(investment_type == "equity") %>% 
+  filter(industry == "Travel") %>% 
+#  group_by(startup_name) %>% 
+#  ggplot(aes(x = shark, y = dollars))+
+  ggplot(aes(x = shark, y = dollars, fill = shark))+
+  geom_col(position = "dodge")+
+  facet_wrap(~startup_name)+
+  coord_flip()
+  
+    
+```
+
+
+
+```{r}
+sharktank_long%>%
+  pivot_longer(original_offered_equity,
+    names_to = c("shark", "investment_type"),
+    names_sep = "_offered_",
+    values_to = "dollars") %>% 
+  relocate(shark, investment_type, dollars, original_offered_equity)
+
 
 ```
 ```{r}
