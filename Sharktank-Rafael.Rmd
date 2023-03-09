@@ -18,7 +18,7 @@ library(RColorBrewer)
 
 Load data in
 ```{r}
-sharktank <-readr::read_csv("data/Shark Tank US dataset.csv")
+sharktank <-readr::read_csv("Our data/Shark Tank US dataset.csv")
 ```
 
 Take a look
