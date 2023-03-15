@@ -35,9 +35,11 @@ names(sharktank)
 
 ##updated in office hours
 sharktank_long <- sharktank %>% 
-  rename(original_offer_investment_equity = original_offered_equity) %>% 
+  rename(original_offer_investment_equity = original_offered_equity) %>% #renamed title so that is was more similar to other titles in dataset 
+  #used relocate feature to move column positions to make it easier to find
   relocate(contains("_investment_equity")) %>% 
   relocate(contains("_investment_amount")) %>% 
+  #used pivot longer to make the shark and investment_type columns - made it easier to graph and compare equity values 
   pivot_longer(barbara_corcoran_investment_amount : guest_investment_equity,
       names_to = c("shark", "investment_type"),
     names_sep = "_investment_",
@@ -56,6 +58,7 @@ sharktank_long_invested <- sharktank %>%
   rename(original_offer_investment_equity = original_offered_equity) %>% 
   relocate(contains("_investment_equity")) %>% 
   relocate(contains("_investment_amount")) %>%
+  #filter to only have products that go investments  
   filter(!is.na(barbara_corcoran_investment_equity) |
          !is.na(mark_cuban_investment_equity)       |
          !is.na(lori_greiner_investment_equity)     |
@@ -84,6 +87,7 @@ table(sharktank$industry)
 ##(FOOD AND BEVERAGE) Bar Graphs
 
 ```{r}
+#Finding the average equities for each industry 
 sharktank_long_invested %>% 
   filter(investment_type == "equity") %>% 
   filter(industry == "Food and Beverage") %>% 
@@ -91,6 +95,7 @@ sharktank_long_invested %>%
 ```
 
 ```{r}
+#Creating bar graphs for the average equities
 sharktank_long_invested %>% 
   filter(investment_type == "equity") %>% 
   filter(industry == "Food and Beverage") %>%
