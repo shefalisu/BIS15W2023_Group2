@@ -1,0 +1,85 @@
+---
+title: "SharkTank-Ingrid1"
+output: html_document
+date: "2023-03-16"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+glimpse(sharktank)
+```
+```{r}
+sharktank <- clean_names(sharktank)
+names(sharktank)
+```
+
+```{r}
+structure(sharktank)
+```
+```{r}
+sharktank <- sharktank%>% 
+pivot_longer(barbara_corcoran_investment_equity : guest_investment_equity,
+      names_to = c("shark", "investment_type"),
+    names_sep = "_investment_",
+    values_to = "dollars") %>% 
+  relocate(shark, investment_type, dollars) %>% 
+sharktank
+```
+
+```{r}
+sharktank <- sharktank %>% 
+  filter(investment_type != "equity")
+
+sharktank
+```
+
+```{r}
+sharktank["dollars"][is.na(sharktank["dollars"])] <- 0 
+sharktank
+```
+
+```{r}
+sharktank <- sharktank %>% 
+  mutate(made_deal=ifelse(dollars>0, 1, 0))
+sharktank
+```
+
+```{r}
+sharktank %>% 
+  count(shark, made_deal) %>% 
+  filter(made_deal==1) %>% 
+  ggplot(aes(x=shark, y= n, fill=shark))+geom_col()
+```
+```{r}
+sharktank %>% 
+  ggplot(aes(x=shark, fill=shark))+geom_bar()
+```
+
+
+
+```{r}
+sharktank %>% 
+  group_by(Industry , ) %>% 
+  
+```
+
+
+
+```{r}
+sharktank <-readr::read_csv("Our data/Shark Tank US dataset.csv") 
+```
+
+
+
+```{r}
+library(tidyverse)
+library(janitor)
+library(naniar)
+library(RColorBrewer)
+```
+```
+
+
