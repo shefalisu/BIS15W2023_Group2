@@ -11,6 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #packages
 ```{r}
 #install.packages("ggplot2")
+#install.packages("paletteer")
 ```
 
 #Load Libraries 
@@ -20,6 +21,7 @@ library(janitor)
 library(naniar)
 library(RColorBrewer)
 library(ggplot2)
+library(paletteer)
 ```
 
 #Load Data and Clean Names
@@ -76,6 +78,14 @@ sharktank_long_invested <- sharktank %>%
 sharktank_long_invested
 ```
 
+#Clean the Names to Remove the "_"
+```{r}
+sharktank_long_invested$shark <- gsub("_", " ", sharktank_long_invested$shark)
+sharktank_long_invested$shark <- str_to_title(sharktank_long_invested$shark)
+
+sharktank_long_invested
+```
+
 
 #Types of Industries Included in the Data Set 
 ```{r}
@@ -84,13 +94,24 @@ table(sharktank$industry)
 
 #Making Bar Graphs that Compare the Original Equity Amount to the Amount the Sharks Actually Got 
 
+
+
+#Choosing a Color Palette
+```{r}
+my_palette <- paletteer_d("ggthemes::Tableau_20")
+```
+
+
+
 ##(FOOD AND BEVERAGE) Bar Graphs
 
 ```{r}
 #Finding the average equities for each industry 
 sharktank_long_invested %>% 
   filter(investment_type == "equity") %>% 
-  filter(industry == "Food and Beverage") %>% 
+  filter(industry == "Food and Beverage") %>%
+  filter(shark == "Mark Cuban") %>%
+  filter(!is.na (total_deal_equity)) %>% 
   arrange(desc(total_deal_equity))
 ```
 
@@ -99,16 +120,18 @@ sharktank_long_invested %>%
 sharktank_long_invested %>% 
   filter(investment_type == "equity") %>% 
   filter(industry == "Food and Beverage") %>%
+  filter(shark == "Mark Cuban"| shark == "Original Offer") %>% 
   filter(startup_name == "WineBalloon"|
            startup_name == "NutsnMore"|
-           startup_name == "Maven'sCreamery"|
-           startup_name == "Chapul"|
+           startup_name == "ReelyHookedFishCo."|
+           startup_name == "Avocaderia"|
            startup_name == "Snacklins")%>% 
   ggplot(aes(x = shark, y = dollars, fill = shark))+
   geom_col(position = "dodge")+
   facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Food and Beverage Equity")+
-  coord_flip()
+  labs(y = "Percent Equity", x = "Offer", title = "Food and Beverage Equity")+
+  coord_flip()+
+  scale_fill_manual(values=my_palette)
 ```
 
 #Checking That Bar Graphs Only Include The Companies That Got Investments 
@@ -124,24 +147,29 @@ sharktank %>%
 ```{r}
 sharktank_long_invested %>% 
   filter(investment_type == "equity") %>% 
-  filter(industry == "Fashion/Beauty") %>% 
+  filter(industry == "Fashion/Beauty") %>%
+  filter(shark == "Daymond John") %>%
+  filter(!is.na (total_deal_equity)) %>% 
   arrange(desc(total_deal_equity))
 ```
+
 
 ```{r}
 sharktank_long_invested %>% 
   filter(investment_type == "equity") %>% 
   filter(industry == "Fashion/Beauty") %>%
-  filter(startup_name == "Evrewares"|
-           startup_name == "Ta-TaTowels"|
-           startup_name == "PiperWei"|
-           startup_name == "RuckPackCombatNutrition"|
-           startup_name == "MakeupJunkieBags")%>% 
+  filter(shark == "Daymond John"| shark == "Original Offer") %>% 
+  filter(startup_name == "Nubrella"|
+           startup_name == "WurkinStiffs"|
+           startup_name == "CombatFlipFlops"|
+           startup_name == "SunStaches"|
+           startup_name == "PurseCase")%>% 
   ggplot(aes(x = shark, y = dollars, fill = shark))+
   geom_col(position = "dodge")+
   facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Fashion/Beauty Equity")+
-  coord_flip()
+  labs(y = "Percent Equity", x = "Offer", title = "Fashion/Beauty Equity")+
+  coord_flip()+
+  scale_fill_manual(values=my_palette)
 ```
 
 ##(LIFESTYLE/HOME) Bar Graphs
@@ -149,184 +177,27 @@ sharktank_long_invested %>%
 ```{r}
 sharktank_long_invested %>% 
   filter(investment_type == "equity") %>% 
-  filter(industry == "Lifestyle/Home") %>% 
+  filter(industry == "Lifestyle/Home") %>%
+  filter(shark == "Lori Greiner") %>%
+  filter(!is.na (total_deal_equity)) %>% 
   arrange(desc(total_deal_equity))
 ```
 
 ```{r}
-sharktank_long_invested %>% 
+ sharktank_long_invested %>% 
   filter(investment_type == "equity") %>% 
   filter(industry == "Lifestyle/Home") %>%
-  filter(startup_name == "CoolWraps"|
-           startup_name == "Biaggi"|
-           startup_name == "MCSquares"|
-           startup_name == "DrainWig"|
-           startup_name == "Blueland")%>% 
+  filter(shark == "Lori Greiner"| shark == "Original Offer") %>% 
+  filter(startup_name == "ScreenMend"|
+           startup_name == "MonkeyMat"|
+           startup_name == "ScrubDaddy"|
+           startup_name == "Urbio"|
+           startup_name == "Outer")%>% 
   ggplot(aes(x = shark, y = dollars, fill = shark))+
   geom_col(position = "dodge")+
   facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Lifestyle/Home Equity")+
-  coord_flip()
+  labs(y = "Percent Equity", x = "Offer", title = "Lifestyle/Home Equity")+
+  coord_flip()+
+  scale_fill_manual(values=my_palette)
 ```
-
-
-
-
-
-
-
-
-
-##OTHER GRAPHS - NOT INCLUDED
-
-##(AUTOMOTIVE) Bar Graphs
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Automotive") %>% 
-  arrange(desc(total_deal_equity))
-```
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Automotive") %>%
-  filter(startup_name == "MokiDoorstep"|
-           startup_name == "PickupPools"|
-           startup_name == "DropStop"|
-           startup_name == "TheSmartWheel"|
-           startup_name == "WaiveCar")%>% 
-  ggplot(aes(x = shark, y = dollars, fill = shark))+
-  geom_col(position = "dodge")+
-  facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Automotive Industry Equity")+
-  coord_flip()
-```
-
-##(BUSINESS SERVICES) Bar Graphs
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Business Services") %>% 
-  arrange(desc(total_deal_equity))
-```
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Business Services") %>%
-  filter(startup_name == "TotalMerchantResources"|
-           startup_name == "PastabyHudson"|
-           startup_name == "VerbalizeItApp"|
-           startup_name == "Sapre"|
-           startup_name == "HireSanta")%>% 
-  ggplot(aes(x = shark, y = dollars, fill = shark))+
-  geom_col(position = "dodge")+
-  facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Business Services Equity")+
-  coord_flip()
-```
-
-##(CHILDREN/EDUCATION) Bar Graphs
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Children/Education") %>% 
-  arrange(desc(total_deal_equity))
-```
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Children/Education") %>%
-  filter(startup_name == "ClassroomJams"|
-           startup_name == "TheCoolWazoo"|
-           startup_name == "DreamlandBaby"|
-           startup_name == "TheCoop"|
-           startup_name == "Jack'sStands&Marketplaces")%>% 
-  ggplot(aes(x = shark, y = dollars, fill = shark))+
-  geom_col(position = "dodge")+
-  facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Children/Education Equity")+
-  coord_flip()
-```
-
-##(FITNESS/SPORTS/OUTDOORS) Bar Graphs
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Fitness/Sports/Outdoors") %>% 
-  arrange(desc(total_deal_equity))
-```
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Fitness/Sports/Outdoors") %>%
-  filter(startup_name == "TheUROClub"|
-           startup_name == "LineCutterz"|
-           startup_name == "Radiate"|
-           startup_name == "UnderTheWeather"|
-           startup_name == "BollyX")%>% 
-  ggplot(aes(x = shark, y = dollars, fill = shark))+
-  geom_col(position = "dodge")+
-  facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Children/Education Equity")+
-  coord_flip()
-```
-
-##(GREEN/CLEAN TECH) Bar Graphs
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Green/CleanTech") %>% 
-  arrange(desc(total_deal_equity))
-```
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Green/CleanTech") %>%
-  filter(startup_name == "PittMoss"|
-           startup_name == "Nohbo"|
-           startup_name == "SwayMotorsports"|
-           startup_name == "BetterLifeCleaningProducts"|
-           startup_name == "Stasher")%>% 
-  ggplot(aes(x = shark, y = dollars, fill = shark))+
-  geom_col(position = "dodge")+
-  facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Children/Education Equity")+
-  coord_flip()
-```
-
-##(HEALTH/WELLNESS) Bar Graphs
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Health/Wellness") %>% 
-  arrange(desc(total_deal_equity))
-```
-
-```{r}
-sharktank_long_invested %>% 
-  filter(investment_type == "equity") %>% 
-  filter(industry == "Health/Wellness") %>%
-  filter(startup_name == "AvaTheElephant"|
-           startup_name == "Breathometer"|
-           startup_name == "Manscaped"|
-           startup_name == "BugBiteThing"|
-           startup_name == "EZCPak")%>% 
-  ggplot(aes(x = shark, y = dollars, fill = shark))+
-  geom_col(position = "dodge")+
-  facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Children/Education Equity")+
-  coord_flip()
-```
-
 

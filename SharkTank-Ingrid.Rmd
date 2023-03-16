@@ -4,6 +4,8 @@ output: html_document
 date: "2023-03-16"
 ---
 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -20,13 +22,24 @@ names(sharktank)
 structure(sharktank)
 ```
 ```{r}
-sharktank <- sharktank%>% 
-pivot_longer(barbara_corcoran_investment_equity : guest_investment_equity,
+sharktank$shark <- gsub("_", " ", sharktank$shark)
+sharktank$shark <- str_to_title(sharktank$shark)
+sharktank
+```
+
+
+```{r}
+sharktank <- sharktank %>% 
+pivot_longer(barbara_corcoran_investment_amount : guest_investment_equity,
       names_to = c("shark", "investment_type"),
     names_sep = "_investment_",
     values_to = "dollars") %>% 
-  relocate(shark, investment_type, dollars) %>% 
+  relocate(shark, investment_type, dollars) 
 sharktank
+```
+
+```{r}
+
 ```
 
 ```{r}
@@ -43,33 +56,139 @@ sharktank
 
 ```{r}
 sharktank <- sharktank %>% 
-  mutate(made_deal=ifelse(dollars>0, 1, 0))
+  mutate(made_deal=ifelse(dollars>0, 1, 0)) 
 sharktank
 ```
 
 ```{r}
+my_palette<- paletteer_d("ggthemes::Tableau_20")
 sharktank %>% 
   count(shark, made_deal) %>% 
   filter(made_deal==1) %>% 
-  ggplot(aes(x=shark, y= n, fill=shark))+geom_col()
-```
-```{r}
-sharktank %>% 
-  ggplot(aes(x=shark, fill=shark))+geom_bar()
+  ggplot(aes(x=shark, y= n, fill=shark))+geom_col()+
+  scale_fill_manual(values=my_palette)
 ```
 
+### Mark Cuban
+```{r}
+sharktank %>% 
+  filter(shark=="mark_cuban") %>% 
+  filter(made_deal==1) %>% 
+  count(industry) %>% 
+  ggplot(aes(x=industry, y=n, fill=industry))+
+  geom_col()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+## Mr.Wonderful
+```{r}
+sharktank %>% 
+  filter(shark=="kevin_o_leary") %>% 
+  filter(made_deal==1) %>% 
+  count(industry) %>% 
+  ggplot(aes(x=industry, y=n, fill=industry))+
+  geom_col()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+##Lori
+```{r}
+sharktank %>% 
+  filter(shark=="lori_greiner") %>% 
+  filter(made_deal==1) %>% 
+  count(industry) %>% 
+  ggplot(aes(x=industry, y=n, fill=industry))+
+  geom_col()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+### Daymond
+```{r}
+sharktank %>% 
+  filter(shark=="daymond_john") %>% 
+  filter(made_deal==1) %>% 
+  count(industry) %>% 
+  ggplot(aes(x=industry, y=n, fill=industry))+
+  geom_col()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+
+```
+
+##Robert
+```{r}
+sharktank %>% 
+  filter(shark=="robert_herjavec") %>% 
+  filter(made_deal==1) %>% 
+  count(industry) %>% 
+  ggplot(aes(x=industry, y=n, fill=industry))+
+  geom_col()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))
+```
+
+
+##FOOD & BEV
+```{r}
+sharktank %>% 
+  filter(industry=="Food and Beverage") %>% 
+  filter(made_deal==1) %>% 
+  count(shark) %>% 
+  ggplot(aes(x=shark, y=n, fill=shark))+
+  geom_col()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+  labs(title = "Sharks Investments in Food and Beverage", 
+       x= "Names of Sharks",
+       y= "Investments",
+       fill= "Names of Sharks")+
+   scale_fill_manual(values=my_palette)
+```
+
+
+##Fasion and Beauty 
+```{r}
+sharktank %>% 
+  filter(industry=="Fashion/Beauty") %>% 
+  filter(made_deal==1) %>% 
+  count(shark) %>% 
+  ggplot(aes(x=shark, y=n, fill=shark))+
+  geom_col()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+  labs(title = "Sharks Investments in Fashion/Beauty", 
+       x= "Names of Sharks",
+       y= "Investments",
+       fill= "Names of Sharks")+
+   scale_fill_manual(values=my_palette)
+```
+
+###Life/home
+```{r}
+sharktank %>% 
+  filter(industry=="Lifestyle/Home") %>% 
+  filter(made_deal==1) %>% 
+  count(shark) %>% 
+  ggplot(aes(x=shark, y=n, fill=shark))+
+  geom_col()+
+  theme(axis.text.x = element_text(angle = 60, hjust = 1))+
+  labs(title = "Sharks Investments in Lifesyle/Home", 
+       x= "Names of Sharks",
+       y= "Investments",
+       fill= "Names of Sharks")+
+   scale_fill_manual(values=my_palette)
+```
 
 
 ```{r}
 sharktank %>% 
-  group_by(Industry , ) %>% 
-  
+  filter(industry=="Food and Beverage") %>% 
+  filter(made_deal==1) %>% 
+  count(shark)
 ```
 
 
 
 ```{r}
 sharktank <-readr::read_csv("Our data/Shark Tank US dataset.csv") 
+```
+```{r}
+install.packages("paletteer")
 ```
 
 
@@ -79,6 +198,7 @@ library(tidyverse)
 library(janitor)
 library(naniar)
 library(RColorBrewer)
+library(paletteer)
 ```
 ```
 
