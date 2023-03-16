@@ -103,11 +103,11 @@ sharktank_long_invested %>%
            startup_name == "NutsnMore"|
            startup_name == "Maven'sCreamery"|
            startup_name == "Chapul"|
-           startup_name == "WickedGoodCupCakes")%>% 
+           startup_name == "Snacklins")%>% 
   ggplot(aes(x = shark, y = dollars, fill = shark))+
   geom_col(position = "dodge")+
   facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Children/Education Equity")+
+  labs(y = "Percent Equity", x = "Shark", title = "Food and Beverage Equity")+
   coord_flip()
 ```
 
@@ -140,7 +140,7 @@ sharktank_long_invested %>%
   ggplot(aes(x = shark, y = dollars, fill = shark))+
   geom_col(position = "dodge")+
   facet_wrap(~startup_name)+
-  labs(y = "Percent Equity", x = "Shark", title = "Children/Education Equity")+
+  labs(y = "Percent Equity", x = "Shark", title = "Fashion/Beauty Equity")+
   coord_flip()
 ```
 
@@ -168,6 +168,11 @@ sharktank_long_invested %>%
   labs(y = "Percent Equity", x = "Shark", title = "Lifestyle/Home Equity")+
   coord_flip()
 ```
+
+
+
+
+
 
 
 
